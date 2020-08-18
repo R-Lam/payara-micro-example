@@ -4,11 +4,11 @@ metadata:
   name: payara-micro-run
 spec:
   pipelineRef:
-    name: payara-micro-pipeline
+    name: new-pipeline
   resources:
-    - name: source
+    - name: payara-repo
       resourceRef:
-        name: payara-micro-git
+        name: git-twkxea
   workspaces:
   - name: shared-workspace
     persistentvolumeclaim:

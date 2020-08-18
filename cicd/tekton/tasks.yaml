@@ -6,7 +6,7 @@ spec:
   description: >-
     This Task can be used to run a Maven build.
   workspaces:
-  - name: maven-repo
+  - name: shared-workspace
   params:
     - name: GOALS
       description: The Maven goals to run
