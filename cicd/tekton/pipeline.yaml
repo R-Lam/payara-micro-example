@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: payara-micro-pipeline
+  namespace: a-cicd
 spec:
   workspaces:
   - name: shared-workspace
@@ -15,11 +16,27 @@ spec:
       workspaces:
       - name: source
         workspace: shared-workspace
-    - name: build-war
+    - name: new-app
       taskRef:
-        name: openshift-client
+        name: new-app
       workspaces:
       - name: source
         workspace: shared-workspace
       runAfter:
       - mvn
+    - name: build-war
+      taskRef:
+        name: build-war
+      workspaces:
+      - name: source
+        workspace: shared-workspace
+      runAfter:
+      - new-app
+    - name: expose-micro
+      taskRef:
+        name: expose-micro
+      workspaces:
+      - name: source
+        workspace: shared-workspace
+      runAfter:
+      - build-war
