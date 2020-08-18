@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: payara-micro-example
+  name: payara-micro-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payara-micro-example
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: payara-micro-example
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/payara-micro-example:latest
+        name: payara-micro-example
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: payara-micro-example
+  name: payara-micro-example
+  namespace: payara-micro-example
+spec:
+  host: "payara-micro-example.apps.ocp4.itmlabs.io"
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: payara-micro-example
+    weight: 100
+status:
+  ingress:
+  - conditions:
+    - status: "True"
+      type: Admitted
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: payara-micro-example
+  name: payara-micro-example
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: payara-micro-example
+---

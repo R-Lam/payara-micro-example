@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: payara-micro-git
+spec:
+  type: git
+  params:
+    - name: revision
+      value: qa-dev
+    - name: url
+      value: https://github.com/R-Lam/payara-micro-example
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: payara-micro-pipeline
+spec:
+  workspaces:
+  - name: shared-workspace
+  resources:
+    - name: source-repo
+      type: git
+  tasks:
+    - name: maven-build
+      taskRef:
+        name: mvn
+      workspaces:
+      - name: source
+        workspace: shared-workspace
+    - name: build-war
+      taskRef:
+        name: openshift-client
+      workspaces:
+      - name: source
+        workspace: shared-workspace
+      runAfter:
+      - mvn

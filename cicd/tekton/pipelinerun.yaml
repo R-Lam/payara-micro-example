@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: payara-micro-run
+spec:
+  pipelineRef:
+    name: payara-micro-pipeline
+  resources:
+    - name: source
+      resourceRef:
+        name: payara-micro-git
+  workspaces:
+  - name: shared-workspace
+    persistentvolumeclaim:
+      claimName: maven-source-pvc
