@@ -1,0 +1,21 @@
+apiVersion: polling.tekton.dev/v1alpha1
+kind: Repository
+metadata:
+  name: example-repository
+spec:
+  url: https://github.com/R-Lam/payara-micro-example.git
+  ref: qa-dev
+  frequency: 1m
+  type: github # can also be gitlab
+  pipelineRef:
+    name: another-pipeline
+    namespace: a-cicd # optional: if provided, the pipelinerun will be created in this namespace to reference the pipeline.
+    params:
+    - name: sha
+      expression: commit.sha
+    - name: repoURL
+      expression: repoURL
+  auth:
+    secretRef:
+      name:  my-github-secret
+    key: token
