@@ -13,8 +13,17 @@ spec:
     params:
     - name: sha
       expression: commit.sha
-    - name: repoURL
+    - name: repoUrl
       expression: repoURL
+  resources:
+    - name: repo
+      resourceSpec:
+        type: git
+        params:
+        - name: url
+          value: \$(params.repoUrl)
+        - name: revision
+          value: \$(params.repoSha)
   auth:
     secretRef:
       name:  my-github-secret
